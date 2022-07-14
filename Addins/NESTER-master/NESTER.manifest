@@ -1,0 +1,13 @@
+{
+	"autodeskProduct":	"Fusion360",
+	"type":	"addin",
+	"id":	"3b330997-dbbb-4cfa-8050-5ea0685a73a6",
+	"author":	"Patrick Rainsberry",
+	"description":	{
+		"":	"Basic Nesting Add-in for FUsion 360"
+	},
+	"version":	"2.0",
+	"runOnStartup":	false,
+	"supportedOS":	"windows|mac",
+	"editEnabled":	true
+}
