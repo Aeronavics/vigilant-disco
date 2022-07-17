@@ -7,6 +7,25 @@ The required dependencies for ExtractBOM are packaged in the folder. These are:
 - openpyxl for creating a excel spreadsheet.
 - NUMPY required by openpyxl
 
-### How to use
+### Assembly and Component formating
+To get the most out of this tool a specific format for assembly layouts and component naming is required. This is well documented in the Aeronavics CAD Standard Practices document currently stored on the Confluence wiki. Not following these standards will cause you a great deal of pain when it comes to using these tools.
 
-![image info](./images/AssLayout.png)
+#### Currently Supported Component Types
+Components and subassemblies can be tagged by placing a tag in brackets (e.g. "(machined)") at the end of the component name. Subassemblies can use the grp modifyer in the tag (e.g. "(machined grp)")to signal that this a group of that type of component so all sub components will be tagged with that type. Tags are not case sensitive. These tags will all be stripped from the name in the BOM. The currently supported types are:
+- fastener
+- printed
+- machined
+- hardware
+- electronics
+- subassembly
+
+![Basic assembly layout](./images/Tags.png)
+
+#### Basic Assembly Format and Rules
+The basic rules for a Fusion 360 Assembly are as follows:
+- Only internal components in the top level.
+- Top level components are all component groups. e.g. Fasteners, Printed, Machined...
+- Not all Component type Groups are necessary. If the assembly doesn't contain any of that type you don't need to add them.
+- Additionally there is no specific ordering of the component type groups that is required.
+
+![Basic assembly layout](./images/AssLayout.png)
