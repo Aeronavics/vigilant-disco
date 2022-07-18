@@ -22,6 +22,7 @@ def run(context):
         makeComponent(comp, 'Hardware', 'Hardware','This subassembly stores all of the Hardware for the toplevel assembly. This is primarily off the shelf components that we do not manufacture at Aeronavics.')
         makeComponent(comp, 'Electronics', 'Electronics','This subassembly stores all of Electronics for the toplevel assembly. This is generally where PCBs exported from Altium are located.')
         makeComponent(comp, 'Subassemblies', 'Subassemblies','This subassembly stores all of external included Subassembiles. When editing these Subassemblies avoid editing in context and remember that the Subassembly may be used on multiple Aircraft. Ensure changes made to Subassemblies do not break other Assemblies they are included in.')
+        makeComponent(comp, 'Looms', 'Subassemblies','This subassembly stores all of external included Subassembiles. When editing these Subassemblies avoid editing in context and remember that the Subassembly may be used on multiple Aircraft. Ensure changes made to Subassemblies do not break other Assemblies they are included in.')
         ui.messageBox('Assembly Tree Generated Successfully')
 
     except:
