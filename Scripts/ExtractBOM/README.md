@@ -26,6 +26,8 @@ The basic rules for a Fusion 360 Assembly are as follows:
 - Only internal components in the top level.
 - Top level components are all component groups. e.g. Fasteners, Printed, Machined...
 - Not all Component type Groups are necessary. If the assembly doesn't contain any of that type you don't need to add them.
+- Having empty component groups is also fine.
+- the generate assembly script can be used to generate the assembly tree quickly and correctly and is the reccommeded method when creating a new assembly.
 - Additionally there is no specific ordering of the component type groups that is required.
 
 ![Basic assembly layout](./images/AssLayout.png)
