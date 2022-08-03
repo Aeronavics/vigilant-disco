@@ -45,7 +45,7 @@ class BOM:
         'material': '--Root--',
         'colour': '--Root--',
         'parentName': '--Root--',
-        'length': 0
+        'length (mm)': 0
         })
 
     # This functions adds the input part and info into the BOM.
@@ -90,7 +90,7 @@ class BOM:
                 'material': material,
                 'colour': color,
                 'parentName': parentName,
-                'length': length
+                'length (mm)': length
             }
         
         self.bomList.append(entry)
@@ -212,7 +212,7 @@ class BOM:
         if (length != 0):
             for entry in self.bomList:
                 if (entry['name'].lower() == name):
-                    entry['length'] = entry['length'] + length
+                    entry['length (mm)'] = entry['length (mm)'] + length
                     return
         
         else:

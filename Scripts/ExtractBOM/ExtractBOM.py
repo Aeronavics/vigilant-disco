@@ -14,7 +14,6 @@ if not my_addin_path in sys.path:
 from .openpyxl import load_workbook,Workbook
 import tkinter as tk
 from tkinter import filedialog
-import re
 
 from py.BomClass import BOM
 
@@ -59,7 +58,7 @@ def run(context):
             'material',
             'colour',
             'mass (grams)',
-            'length'
+            'length (mm)'
             ]
 
         bom2Cols = [
@@ -70,9 +69,12 @@ def run(context):
             'material',
             'colour',
             'mass (grams)',
-            'length'
+            'length (mm)'
             ]
         
+
+
+
         # Setup column names for the spreadsheet
         for col, val in enumerate(bom1Cols, start=1):
             ws1.cell(row=1, column=col).value = val
@@ -80,6 +82,7 @@ def run(context):
         for r, comp in enumerate(bom1.bomList, start=2):
             for col, key in enumerate(bom1Cols, start=1):
                 ws1.cell(row=r, column=col).value = comp[key]
+                # ws1.cell(row=r, column=col).fill = PatternFill("solid", fgColor="DDDDDD")
 
         # Setup column names for the spreadsheet
         for col, val in enumerate(bom2Cols, start=1):
@@ -89,12 +92,14 @@ def run(context):
         for r, comp in enumerate(bom2.bomList, start=2):
             for col, key in enumerate(bom2Cols, start=1):
                 ws2.cell(row=r, column=col).value = comp[key]
-        
 
+        
+        
         tkRoot = tk.Tk()
         tkRoot.withdraw()
         filename = filedialog.askopenfilename() # show an "Open" dialog box and return the path to the selected file
         wb.save(filename)
+
         ui.messageBox('file saved')
         os.startfile(filename)
     except:
@@ -141,6 +146,7 @@ def recursiveCompInfoStruct(parentComponent:adsk.fusion.Component, bom :BOM, mul
             continue
 
         bom.addEntry(name=ucomp.name, desc=ucomp.description, partNumber=ucomp.partNumber, parentName=parentComponent.name,  parentDesc=parentComponent.description, parentPartNumber=parentComponent.partNumber, instancesInSubassembly=comps.count(ucomp), instances=multiplier*comps.count(ucomp), mass=mass, material = material, color= color, length=length)
+        
         recursiveCompInfoStruct(ucomp, bom, multiplier*comps.count(ucomp))
     return bom
 
@@ -163,10 +169,6 @@ def recursiveCompInfoAll(parentComponent:adsk.fusion.Component, bom : BOM):
             if "(construction)" in comp.name:
                 continue
             
-            
-            
-
-
             # Gather any BOM worthy values from the component
             mass = 0
             material = False
@@ -179,6 +181,7 @@ def recursiveCompInfoAll(parentComponent:adsk.fusion.Component, bom : BOM):
                     color = bodyK.appearance.name
             
             mass = round(mass,4)
+
             # If the component has a mass then we add it to the BOM
             if (not mass == 0):
                 bom.addEntry(name=comp.name, desc=comp.description, partNumber=comp.partNumber, parentName=parentComponent.name,  parentDesc=parentComponent.description, parentPartNumber=parentComponent.partNumber, instancesInSubassembly=1, instances=1, mass=mass, material = material, color= color, length=length)
