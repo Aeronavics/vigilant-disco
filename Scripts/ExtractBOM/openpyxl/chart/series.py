@@ -1,4 +1,4 @@
-# Copyright (c) 2010-2022 openpyxl
+# Copyright (c) 2010-2021 openpyxl
 
 
 from openpyxl.descriptors.serialisable import Serialisable
@@ -162,12 +162,10 @@ class Series(Serialisable):
         self.smooth = smooth
         self.explosion = explosion
 
-
     def to_tree(self, tagname=None, idx=None):
-        """The index can need rebasing"""
         if idx is not None:
             if self.order == self.idx:
-                self.order = idx # rebase the order if the index has been rebased
+                self.order = idx
             self.idx = idx
         return super(Series, self).to_tree(tagname)
 

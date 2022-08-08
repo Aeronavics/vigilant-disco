@@ -15,7 +15,12 @@ class BOM:
         "Electronics Grp": "Electronics",
         "Printed Grp":"Printed",
         "Subassemblies Grp": "Subassemblies",
-        "Looms Grp": "Looms"
+        "Looms Grp": "Looms",
+        "Wires Grp": "Wires",
+        "Plugs Grp": "Plugs",
+        "Crimps Grp": "Crimps",
+        "Consumables Grp": "Consumables",
+        "Loom Electronics Grp": "Loom Electronics"
      }
 
     
@@ -152,7 +157,7 @@ class BOM:
         compType = "ERROR"
 
         # Strip the version Number from the component name and parent Name
-        parentName = self.removeFusionVersionNumberAndPartNumber(parentName,"").lower()
+        parentName = self.removeFusionVersionNumberAndPartNumber(name=parentName, partNumber="").lower()
         name = self.removeFusionVersionNumberAndPartNumber(name,"").lower()
         parentDesc = parentDesc.lower()
 
@@ -174,7 +179,8 @@ class BOM:
     
     # This function strips out the fusion version number and the part number from the input component name.
     # passing False into the partNumber will prevent the part number from being removed.
-    def removeFusionVersionNumberAndPartNumber(self, name:str, partNumber:str):
+    @staticmethod
+    def removeFusionVersionNumberAndPartNumber(name:str, partNumber:str):
 
         # Split the string at the v to seperate the version number
         nameSplit = name[::-1].split("v",1)

@@ -1,4 +1,4 @@
-# Copyright (c) 2010-2022 openpyxl
+# Copyright (c) 2010-2021 openpyxl
 
 from io import BytesIO
 
@@ -55,9 +55,7 @@ class Image(object):
             img.save(fp, format="png")
             fp.seek(0)
 
-        data = fp.read()
-        fp.close()
-        return data
+        return fp.read()
 
 
     @property
