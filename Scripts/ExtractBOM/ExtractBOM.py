@@ -6,6 +6,8 @@ import adsk.core, adsk.fusion, traceback
 #import system modules
 import os, sys
 
+from pathlib import Path
+
 #get the path of add-in
 my_addin_path = os.path.dirname(os.path.realpath(__file__)) 
 print(my_addin_path)
@@ -40,7 +42,6 @@ def run(context):
         ws1.title = "Structured BOM"
         ws2 =  wb.create_sheet("Unstructured BOM")
         ws3 =  wb.create_sheet("Looms BOM")
-        title = 'Extract BOM'
         
         
         # create bom list
@@ -99,7 +100,14 @@ def run(context):
         
         tkRoot = tk.Tk()
         tkRoot.withdraw()
-        filename = filedialog.askopenfilename() # show an "Open" dialog box and return the path to the selected file
+
+        # filename = filedialog.askopenfilename() # show an "Open" dialog box and return the path to the selected file
+        filename = filedialog.asksaveasfilename(filetypes=(
+                    ("Excel Workbook", "*.xlsx"),
+                    ("All files", "*.*"),
+                ),
+                initialfile = root.name + ' BOM.xlsx'
+            )
         wb.save(filename)
 
         ui.messageBox('file saved')
@@ -191,13 +199,17 @@ def recursiveCompInfoAll(parentComponent:adsk.fusion.Component, bom : BOM, loomS
             # If the component has a mass then we add it to the BOM
             if (not mass == 0):
                 bom.addEntry(name=comp.name, desc=comp.description, partNumber=comp.partNumber, parentName=parentComponent.name,  parentDesc=parentComponent.description, parentPartNumber=parentComponent.partNumber, instancesInSubassembly=1, instances=1, mass=mass, material = material, color= color, length=length)
+            
+            compType = bom.getCompType(name=comp.name, desc=comp.description, parentName=parentComponent.name, parentDesc=parentComponent.description)
+            # If the component is a Loom don't store the sub components in this BOM. Instead store it in the Looms BOM
+            if compType == "Looms":
+                bom.addEntry(name=comp.name, desc=comp.description, partNumber=comp.partNumber, parentName=parentComponent.name,  parentDesc=parentComponent.description, parentPartNumber=parentComponent.partNumber, instancesInSubassembly=1, instances=1, mass=mass, material = "Loom", color= "Loom", length="See Loom Bom")
+                addLoom(loomSheet, comp)
+                continue
         
+        # If the component is a Loom don't store the sub components in this BOM.
         compType = bom.getCompType(name=comp.name, desc=comp.description, parentName=parentComponent.name, parentDesc=parentComponent.description)
-        
-        # If the component is a Loom don't store the sub components in this BOM. Instead store it in the Looms BOM
         if compType == "Looms":
-            bom.addEntry(name=comp.name, desc=comp.description, partNumber=comp.partNumber, parentName=parentComponent.name,  parentDesc=parentComponent.description, parentPartNumber=parentComponent.partNumber, instancesInSubassembly=1, instances=1, mass=mass, material = material, color= color, length=length)
-            addLoom(loomSheet, comp)
             continue
         recursiveCompInfoAll(comp, bom, loomSheet)
     return
