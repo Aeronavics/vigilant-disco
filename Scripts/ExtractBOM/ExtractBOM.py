@@ -195,7 +195,7 @@ def recursiveCompInfoAll(parentComponent:adsk.fusion.Component, bom : BOM, loomS
                 try:
                     addLoom(loomSheet, comp)
                 except Exception as e:
-                    adsk.core.Application.get().userInterface.messageBox('Error in Loom: ' + comp.name + '\nCheck Loom is setup correctly.\nError message: ' + str(e))
+                    adsk.core.Application.get().userInterface.messageBox('Error in Loom: ' + comp.name + '\nCheck Loom is setup correctly.\nError message: ' + str(e) + '\n' + str(traceback.format_exc()))
                 continue
         
         # If the component is a Loom don't store the sub components in this BOM.
@@ -225,7 +225,7 @@ def addLoom(sheet, LoomComp:adsk.fusion.Component):
         if comp.name.lower() == "wires":
             wireTags = getWireTags(comp.description)
             for wireTag in wireTags:
-                for wireOccr in comp.occurrences:
+                for wireOccr in comp.allOccurrences:
                     wireComp = wireOccr.component
                     if wireTag["Wire Part Number"] == wireComp.partNumber:
                         material = "Error Material not found"
@@ -240,28 +240,28 @@ def addLoom(sheet, LoomComp:adsk.fusion.Component):
         if comp.name.lower() == "plugs":
             plugTags = getPlugTags(comp.description)
             for Tag in plugTags:
-                for tagOccr in comp.occurrences:
+                for tagOccr in comp.allOccurrences:
                     tagComp = tagOccr.component
                     if Tag["Plug Part Number"] == tagComp.partNumber:
                         Tag["Plug Name"] = BOM.removeFusionVersionNumberAndPartNumber(name=tagComp.name,partNumber=tagComp.partNumber)
         if comp.name.lower() == "crimps":
             crimpTags = getCrimpTags(comp.description)
             for Tag in crimpTags:
-                for tagOccr in comp.occurrences:
+                for tagOccr in comp.allOccurrences:
                     tagComp = tagOccr.component
                     if Tag["Crimp Part Number"] == tagComp.partNumber:
                         Tag["Crimp Name"] = BOM.removeFusionVersionNumberAndPartNumber(name=tagComp.name,partNumber=tagComp.partNumber)
         if comp.name.lower() == "loom electronics":
             loomElectronicsTags = getLoomElectronicsTags(comp.description)
             for Tag in loomElectronicsTags:
-                for tagOccr in comp.occurrences:
+                for tagOccr in comp.allOccurrences:
                     tagComp = tagOccr.component
                     if Tag["Electronics Part Number"] == tagComp.partNumber:
                         Tag["Electronics Name"] = BOM.removeFusionVersionNumberAndPartNumber(name=tagComp.name,partNumber=tagComp.partNumber)
         if comp.name.lower() == "consumables":
             consumablesTags = getConsumablesTags(comp.description)
             for Tag in consumablesTags:
-                for tagOccr in comp.occurrences:
+                for tagOccr in comp.allOccurrences:
                     tagComp = tagOccr.component
                     if Tag["Consumables Part Number"] == tagComp.partNumber:
                         Tag["Consumables Name"] = BOM.removeFusionVersionNumberAndPartNumber(name=tagComp.name,partNumber=tagComp.partNumber)
@@ -381,6 +381,9 @@ def getWireTags(desc:str) -> list:
     desc = desc.replace("("+tags+")","")
     while desc != "":
         tags = find_between(desc,"(",")")
+        if tags == "":
+            desc == ""
+            break
         desc = desc.replace("("+tags+")","")
         splitTags = tags.split(":")
         tagList.append({
@@ -407,6 +410,9 @@ def getPlugTags(desc:str) -> list:
     desc = desc.replace("("+tags+")","")
     while desc != "":
         tags = find_between(desc,"(",")")
+        if tags == "":
+            desc == ""
+            break
         desc = desc.replace("("+tags+")","")
         splitTags = tags.split(":")
         tagList.append({
@@ -424,6 +430,9 @@ def getCrimpTags(desc:str) -> list:
     desc = desc.replace("("+tags+")","")
     while desc != "":
         tags = find_between(desc,"(",")")
+        if tags == "":
+            desc == ""
+            break
         desc = desc.replace("("+tags+")","")
         splitTags = tags.split(":")
         tagList.append({
@@ -442,6 +451,9 @@ def getLoomElectronicsTags(desc:str) -> list:
     desc = desc.replace("("+tags+")","")
     while desc != "":
         tags = find_between(desc,"(",")")
+        if tags == "":
+            desc == ""
+            break
         desc = desc.replace("("+tags+")","")
         splitTags = tags.split(":")
         tagList.append({
@@ -459,6 +471,9 @@ def getConsumablesTags(desc:str) -> list:
     desc = desc.replace("("+tags+")","")
     while desc != "":
         tags = find_between(desc,"(",")")
+        if tags == "":
+            desc == ""
+            break
         desc = desc.replace("("+tags+")","")
         splitTags = tags.split(":")
         tagList.append({
