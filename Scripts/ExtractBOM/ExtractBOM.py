@@ -194,8 +194,8 @@ def recursiveCompInfoAll(parentComponent:adsk.fusion.Component, bom : BOM, loomS
                 bom.addEntry(name=comp.name, desc=comp.description, partNumber=comp.partNumber, parentName=parentComponent.name,  parentDesc=parentComponent.description, parentPartNumber=parentComponent.partNumber, instancesInSubassembly=1, instances=1, mass=mass, material = "Loom", color= "Loom", length="See Loom Bom")
                 try:
                     addLoom(loomSheet, comp)
-                except:
-                    adsk.core.Application.get().userInterface.messageBox('Error in Loom: ' + comp.name + '\nCheck Loom is setup correctly.')
+                except Exception as e:
+                    adsk.core.Application.get().userInterface.messageBox('Error in Loom: ' + comp.name + '\nCheck Loom is setup correctly.\nError message: ' + str(e))
                 continue
         
         # If the component is a Loom don't store the sub components in this BOM.
@@ -213,6 +213,11 @@ def addLoom(sheet, LoomComp:adsk.fusion.Component):
         BOM.removeFusionVersionNumberAndPartNumber(name=LoomComp.name, partNumber=LoomComp.partNumber),
         LoomComp.description
     ]
+    wireTags = []
+    plugTags = []
+    loomElectronicsTags = []
+    crimpTags = []
+    consumablesTags = []
 
     occrs = LoomComp.occurrences
     for occr in occrs:
