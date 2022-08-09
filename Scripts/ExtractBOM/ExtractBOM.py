@@ -79,18 +79,6 @@ def run(context):
             'length (mm)'
             ]
         
-        loomCols = [
-            'partNumber',
-            'name',
-            'type',
-            'instances',
-            'material',
-            'colour',
-            'mass (grams)',
-            'length (mm)'
-            ]
-
-
         ## Structured Bom
         ws1 = writeToSheet(sheet=ws1, colList=structuredCols, bom=structuredBom)
         ## Unstructured Bom
@@ -204,7 +192,10 @@ def recursiveCompInfoAll(parentComponent:adsk.fusion.Component, bom : BOM, loomS
             # If the component is a Loom don't store the sub components in this BOM. Instead store it in the Looms BOM
             if compType == "Looms":
                 bom.addEntry(name=comp.name, desc=comp.description, partNumber=comp.partNumber, parentName=parentComponent.name,  parentDesc=parentComponent.description, parentPartNumber=parentComponent.partNumber, instancesInSubassembly=1, instances=1, mass=mass, material = "Loom", color= "Loom", length="See Loom Bom")
-                addLoom(loomSheet, comp)
+                try:
+                    addLoom(loomSheet, comp)
+                except:
+                    adsk.core.Application.get().userInterface.messageBox('Error in Loom: ' + comp.name + '\nCheck Loom is setup correctly.')
                 continue
         
         # If the component is a Loom don't store the sub components in this BOM.
