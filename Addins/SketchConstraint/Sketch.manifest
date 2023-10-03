@@ -1,0 +1,13 @@
+{
+	"autodeskProduct":	"Fusion360",
+	"type":	"addin",
+	"id":	"31d19906-baca-4d53-9e1c-2ab9e4519022",
+	"author":	"Patrick Rainsberry",
+	"description":	{
+		"":	"A sample Fusion 360 Addin to demonstrate various UI elements."
+	},
+	"version":	"0.1.0",
+	"runOnStartup":	false,
+	"supportedOS":	"windows|mac",
+	"editEnabled":	true
+}
